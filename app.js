@@ -47,6 +47,7 @@ function promptUser(){
                 const Member = new Intern(name, id, email, school);
                 teamMember.push(Member);
                 console.log(Member);
+                addMember();
 
             })
         }
@@ -62,6 +63,7 @@ function promptUser(){
                 const Member = new Manager(name, id, email, officeNum);
                 teamMember.push(Member);
                 console.log(Member)
+                addMember();
             })
         }
 
@@ -76,12 +78,30 @@ function promptUser(){
                 const Member = new Engineer(name, id, email, github);
                 teamMember.push(Member);
                 console.log(Member)
+                addMember();
             })
         }
-
-
-
     }
 )}
 
+function addMember(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Enter another member?",
+            name: "addMember",
+            choices: [
+                "Yes",
+                "No"
+            ]
+        }
+    ]).then(function({ addMember }){
+        if (addMember === "Yes") {
+            promptUser();}
+            else {
+            console.log(teamMember)
+            }
+        }
+    )
+}
 promptUser();
