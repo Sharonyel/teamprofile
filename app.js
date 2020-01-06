@@ -13,7 +13,38 @@ var employees = [];
 
 // User enter prompts for information
 
-function promptUser(){
+function getManagerInfo(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter Manager Name:",
+            name: "name"
+        },
+        {
+            type: "input",
+            message: "Email:",
+            name: "email"
+        },
+        {
+            type: "input",
+            message: "Id",
+            name: "id"
+        },
+        {
+            type: "input",
+            message: "Office Number",
+            name: "officeNumber"
+        }
+    ]).then(function({ name, email, id, officeNumber } ){
+        const Member = new Manager(name, id, email, officeNumber);
+        employees.push(Member);
+
+        addTeamMember();
+    });  
+
+}
+
+function addTeamMember(){
     inquirer.prompt([
         {
             type: "input",
@@ -35,7 +66,6 @@ function promptUser(){
             message: "Select Role",
             name: "role",
             choices: [
-                "Manager",
                 "Engineer",
                 "Intern"
             ]
@@ -54,23 +84,8 @@ function promptUser(){
                 const Member = new Intern(name, id, email, school);
                 employees.push(Member);
                  
-                addMember();
+                addanotherMember();
 
-            })
-        }
-
-        if (role === "Manager") {
-            inquirer.prompt([
-                {
-                    type: "input",
-                    message: "Office Number",
-                    name: "officeNumber"
-                }
-            ]).then(function({ officeNumber } ){
-                const Member = new Manager(name, id, email, officeNumber);
-                employees.push(Member);
-
-                addMember();
             })
         }
 
@@ -85,7 +100,7 @@ function promptUser(){
                 const Member = new Engineer(name, id, email, github);
                 employees.push(Member);
                  
-                addMember();
+                addanotherMember();
             })
         }
     }
@@ -93,7 +108,7 @@ function promptUser(){
 
 // promt to add another member, if no more then generate HTML
 
-function addMember(){
+function addanotherMember(){
     inquirer.prompt([
         {
             type: "list",
@@ -106,7 +121,7 @@ function addMember(){
         }
     ]).then(function({ addMember }){
         if (addMember === "Yes") {
-            promptUser();
+            addTeamMember();
         }
             else {
             const teamHTML = generateHTML();
@@ -162,6 +177,6 @@ function generateHTML() {
 }
 
 
-promptUser();
+getManagerInfo();
 
 
