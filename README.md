@@ -9,11 +9,11 @@ node.js
 Screen Shots
 ---
 
-<img src="./assets/images/ss1.png" width=700>  
+<img src="./assets/images/screenshot1.png" width=700>  
 
 
 
-<img src="./assets/images/ss2.png" width=700>  
+<img src="./assets/images/screenshot2.png" width=700>  
 
 
 

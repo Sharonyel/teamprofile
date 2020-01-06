@@ -11,7 +11,7 @@ const writeFileAsync = util.promisify(fs.writeFile);
 // array to hold all team members
 var employees = [];
 
-// User enter prompts for information
+// User enter prompts for managert information
 
 function getManagerInfo(){
     inquirer.prompt([
@@ -22,12 +22,12 @@ function getManagerInfo(){
         },
         {
             type: "input",
-            message: "Email:",
+            message: "Manager Email:",
             name: "email"
         },
         {
             type: "input",
-            message: "Id",
+            message: "Manager Id",
             name: "id"
         },
         {
@@ -44,21 +44,23 @@ function getManagerInfo(){
 
 }
 
+// user prompt for team information
+
 function addTeamMember(){
     inquirer.prompt([
         {
             type: "input",
-            message: "Employee Name:",
+            message: "Member Name:",
             name: "name"
         },
         {
             type: "input",
-            message: "Email:",
+            message: "Member Email:",
             name: "email"
         },
         {
             type: "input",
-            message: "Id",
+            message: "Member Id",
             name: "id"
         },
         {
