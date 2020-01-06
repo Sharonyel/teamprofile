@@ -3,8 +3,15 @@ const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const inquirer = require("inquirer");
+var util = require('util');
+var fs = require("fs");
 
-var teamMember = [];
+const writeFileAsync = util.promisify(fs.writeFile);
+
+// var teamManager = [];
+// var teamEngineer = [];
+// var teamIntern = [];
+var employees = [];
 
 function promptUser(){
     inquirer.prompt([
@@ -34,7 +41,7 @@ function promptUser(){
             ]
         }
     
-    ]).then(function ({ name, email, id, role }){
+    ]).then(function ({ name, id, email, role }){
         
         if (role === "Intern") {
             inquirer.prompt([
@@ -45,7 +52,7 @@ function promptUser(){
                 }
             ]).then(function ({ school }){
                 const Member = new Intern(name, id, email, school);
-                teamMember.push(Member);
+                employees.push(Member);
                 console.log(Member);
                 addMember();
 
@@ -57,12 +64,17 @@ function promptUser(){
                 {
                     type: "input",
                     message: "Office Number",
-                    name: "officeNum"
+                    name: "officeNumber"
                 }
-            ]).then(function({ officeNum } ){
-                const Member = new Manager(name, id, email, officeNum);
-                teamMember.push(Member);
+            ]).then(function({ officeNumber } ){
+                const Member = new Manager(name, id, email, officeNumber);
+                employees.push(Member);
+
                 console.log(Member)
+                // const managerHTML = generateHTML(name, id, email, officeNumber);
+                // writeFileAsync("manager.html", managerHTML);
+
+
                 addMember();
             })
         }
@@ -76,7 +88,7 @@ function promptUser(){
                 }
             ]).then(function({ github } ){
                 const Member = new Engineer(name, id, email, github);
-                teamMember.push(Member);
+                employees.push(Member);
                 console.log(Member)
                 addMember();
             })
@@ -99,9 +111,59 @@ function addMember(){
         if (addMember === "Yes") {
             promptUser();}
             else {
-            console.log(teamMember)
+            console.log(employees)
+            const teamHTML = generateHTML();
+             writeFileAsync("./templates/main.html", teamHTML);
+         
             }
         }
     )
 }
+
+function generateHTML() {
+    var cards = [];
+    employees.forEach(function(employee){
+        cards.push(employee.generateHTML())
+    })
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Manager</title>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </head>
+        <style>
+      .card-body{
+        padding: 10px;
+      }
+      .wrapper{
+        padding: 5px;
+        display: inline-block;
+    }
+
+      h5.card-title, i, p, h1{
+        color: white;
+      }
+      </style>
+
+    <body>
+        <div class="jumbotron" style="background-color: red; text-align: center;">
+            <h1 class="display-4">My Team</h1>
+          </div>
+        <div class="container">
+        <br>
+        ${cards.join(" ")}
+              </div>
+    
+    </body>
+    </html>`
+}
+
+
 promptUser();
+
+
