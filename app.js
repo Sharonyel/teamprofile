@@ -8,10 +8,10 @@ var fs = require("fs");
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
-// var teamManager = [];
-// var teamEngineer = [];
-// var teamIntern = [];
+// array to hold all team members
 var employees = [];
+
+// User enter prompts for information
 
 function promptUser(){
     inquirer.prompt([
@@ -32,7 +32,7 @@ function promptUser(){
         },
         {
             type: "list",
-            message: "Role",
+            message: "Select Role",
             name: "role",
             choices: [
                 "Manager",
@@ -53,7 +53,7 @@ function promptUser(){
             ]).then(function ({ school }){
                 const Member = new Intern(name, id, email, school);
                 employees.push(Member);
-                console.log(Member);
+                 
                 addMember();
 
             })
@@ -70,11 +70,6 @@ function promptUser(){
                 const Member = new Manager(name, id, email, officeNumber);
                 employees.push(Member);
 
-                console.log(Member)
-                // const managerHTML = generateHTML(name, id, email, officeNumber);
-                // writeFileAsync("manager.html", managerHTML);
-
-
                 addMember();
             })
         }
@@ -89,12 +84,14 @@ function promptUser(){
             ]).then(function({ github } ){
                 const Member = new Engineer(name, id, email, github);
                 employees.push(Member);
-                console.log(Member)
+                 
                 addMember();
             })
         }
     }
 )}
+
+// promt to add another member, if no more then generate HTML
 
 function addMember(){
     inquirer.prompt([
@@ -109,9 +106,9 @@ function addMember(){
         }
     ]).then(function({ addMember }){
         if (addMember === "Yes") {
-            promptUser();}
+            promptUser();
+        }
             else {
-            console.log(employees)
             const teamHTML = generateHTML();
              writeFileAsync("./templates/main.html", teamHTML);
          
@@ -119,6 +116,8 @@ function addMember(){
         }
     )
 }
+
+// Generate HTML using data from each role
 
 function generateHTML() {
     var cards = [];
@@ -131,23 +130,22 @@ function generateHTML() {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Manager</title>
+        <title>My Team</title>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </head>
-        <style>
+     <style>
       .card-body{
         padding: 10px;
-      }
+        }
       .wrapper{
         padding: 5px;
         display: inline-block;
-    }
-
+        }
       h5.card-title, i, p, h1{
         color: white;
-      }
+        }
       </style>
 
     <body>
